@@ -1,0 +1,150 @@
+1. Flutter: Call API and Display Data in List
+
+import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class ApiListPage extends StatefulWidget {
+  @override
+  _ApiListPageState createState() => _ApiListPageState();
+}
+
+class _ApiListPageState extends State<ApiListPage> {
+  List data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse("https://jsonplaceholder.typicode.com/posts"));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        data = json.decode(response.body);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("API Data")),
+      body: ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(data[index]['title']),
+            subtitle: Text(data[index]['body']),
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+
+
+
+2. Flutter Pagination (Load More Data)
+
+int page = 1;
+bool isLoading = false;
+List data = [];
+ScrollController _controller = ScrollController();
+
+@override
+void initState() {
+  super.initState();
+  fetchData();
+  _controller.addListener(() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      fetchData();
+    }
+  });
+}
+
+Future<void> fetchData() async {
+  if (isLoading) return;
+
+  setState(() => isLoading = true);
+
+  final response = await http.get(
+    Uri.parse("https://jsonplaceholder.typicode.com/posts?_page=$page&_limit=10"),
+  );
+
+  if (response.statusCode == 200) {
+    List newData = json.decode(response.body);
+    setState(() {
+      page++;
+      data.addAll(newData);
+      isLoading = false;
+    });
+  }
+}
+
+
+
+
+
+
+3. Dart: Reverse String using Recursion
+
+String reverse(String str) {
+  if (str.isEmpty) return "";
+  return reverse(str.substring(1)) + str[0];
+}
+
+void main() {
+  print(reverse("hello")); // olleh
+}
+
+
+
+
+4. Dart: Find Longest Word in Sentence
+
+String longestWord(String sentence) {
+  List<String> words = sentence.split(" ");
+  String longest = "";
+
+  for (String word in words) {
+    if (word.length > longest.length) {
+      longest = word;
+    }
+  }
+  return longest;
+}
+
+void main() {
+  print(longestWord("Flutter is very powerful framework"));
+}
+
+
+
+
+
+5. Java: Find Duplicate Elements in Array
+
+import java.util.*;
+
+public class DuplicateElements {
+    public static void main(String[] args) {
+        int arr[] = {1, 2, 3, 2, 4, 5, 1};
+
+        Set<Integer> seen = new HashSet<>();
+        Set<Integer> duplicates = new HashSet<>();
+
+        for (int num : arr) {
+            if (!seen.add(num)) {
+                duplicates.add(num);
+            }
+        }
+
+        System.out.println("Duplicate elements: " + duplicates);
+    }
+}
+
