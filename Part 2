@@ -1,0 +1,42 @@
+----Question 1
+class Solution {
+  List<int> twoSum(List<int> nums, int target) {
+    Map<int, int> map = {};
+
+    for (int i = 0; i < nums.length; i++) {
+      int diff = target - nums[i];
+
+      if (map.containsKey(diff)) {
+        return [map[diff]!, i];
+      }
+
+      map[nums[i]] = i;
+    }
+    return [];
+  }
+}
+
+
+
+
+----Question 2
+
+
+class Solution {
+  int lengthOfLongestSubstring(String s) {
+    Set<String> set = {};
+    int left = 0, maxLength = 0;
+
+    for (int right = 0; right < s.length; right++) {
+      while (set.contains(s[right])) {
+        set.remove(s[left]);
+        left++;
+      }
+      set.add(s[right]);
+      maxLength = maxLength > (right - left + 1)
+          ? maxLength
+          : (right - left + 1);
+    }
+    return maxLength;
+  }
+}
